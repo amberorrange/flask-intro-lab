@@ -18,7 +18,7 @@ AWESOMENESS = [
 def start_here():
     """Home page."""
 
-    return "<!doctype html><html>Hi! This is the home page.</html>"
+    return "<!doctype html><html><a href='/hello'>Let's get started!</a></html>"
 
 
 @app.route('/hello')
@@ -30,25 +30,68 @@ def say_hello():
     <html>
       <head>
         <title>Hi There!</title>
+        <style>
+          form {
+            display: inline-block;
+            margin: 5px;
+          }
+        </style>
       </head>
       <body>
         <h1>Hi There!</h1>
         <form action="/greet">
           What's your name? <input type="text" name="person">
-          <input type="submit" value="Submit">
+          <p>Choose a compliment!</p>
+          <select name="compliment">
+            <option value="nice">Nice</option>
+            <option value="great">Great</option>
+            <option value="awesome">Awesome</option>
+          </select>
+          <input type="submit" value="Submit"> 
+        </form>
+        <br>
+        <form action="/diss">
+         What's your name? <input type="text" name="person">
+          <p>Or choose an insult!</p>
+          <select name="diss">
+            <option value="smelly">smelly</option>
+            <option value="mean">mean</option>
+            <option value="just okay">just okay</option>
+          </select>
+          <input type="submit" value="Submit"> 
         </form>
       </body>
     </html>
     """
 
+@app.route('/diss')
+def insult_person():
+  """Insults user"""
+
+  player = request.args.get("person")
+  diss = request.args.get("diss")
+
+  return """
+  <!doctype html>
+  <html>
+    <head>
+      <title>A Compliment</title>
+    </head>
+    <body>
+      Hi, {}! I think you're {}!
+    </body>
+  </html>
+  """.format(player, diss)
+
+
 
 @app.route('/greet')
+
 def greet_person():
     """Get user by name."""
 
     player = request.args.get("person")
-
-    compliment = choice(AWESOMENESS)
+    compliment = request.args.get("compliment")
 
     return """
     <!doctype html>
